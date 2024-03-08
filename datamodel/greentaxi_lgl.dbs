@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="greentaxi_lgl" id="LogicalDesign-8a6" database="LogicalDesign" >
+	<schema name="INSTANCE" catalogname="greentaxi_lgl" >
+		<table name="dim_location" prior="Entity" >
+			<column name="location_id" type="INT" jt="4" mandatory="y" />
+			<index name="pk_dim_location" unique="PRIMARY_KEY" >
+				<column name="location_id" />
+			</index>
+		</table>
+		<table name="dim_paymenttype" prior="Entity" >
+			<column name="paymenttype_id" type="INT" jt="4" mandatory="y" />
+			<index name="pk_dim_paymenttype" unique="PRIMARY_KEY" >
+				<column name="paymenttype_id" />
+			</index>
+		</table>
+		<table name="dim_triptype" prior="dim_triptype_id" >
+			<column name="triptype_id" type="INT" jt="4" mandatory="y" />
+			<index name="pk_dim_triptype" unique="PRIMARY_KEY" >
+				<column name="triptype_id" />
+			</index>
+		</table>
+		<table name="dim_vendor" prior="Entity" >
+			<column name="vendor_id" type="INT" jt="4" mandatory="y" />
+			<index name="pk_dim_vendor" unique="PRIMARY_KEY" >
+				<column name="vendor_id" />
+			</index>
+		</table>
+		<table name="facts_trip" prior="fact_trip" >
+			<column name="fact_id" type="BIGINT" jt="-5" mandatory="y" />
+			<column name="fare_amount" type="DECIMAL" length="5" decimal="2" jt="3" />
+			<column name="vendorid" type="INT" jt="4" mandatory="y" />
+			<column name="pickupLocationID" type="INT" jt="4" mandatory="y" />
+			<column name="dropoffLocationID" type="INT" jt="4" mandatory="y" />
+			<fk name="fk_facts_trip_dim_vendor" virtual="y" to_schema="greentaxi_lgl.INSTANCE" to_table="dim_vendor" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="vendorid" pk="vendor_id" />
+			</fk>
+			<fk name="fk_facts_trip_dim_location" virtual="y" to_schema="greentaxi_lgl.INSTANCE" to_table="dim_location" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="pickupLocationID" pk="location_id" />
+			</fk>
+			<fk name="fk_facts_trip_dim_location_0" virtual="y" to_schema="greentaxi_lgl.INSTANCE" to_table="dim_location" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="dropoffLocationID" pk="location_id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-1e68" show_relation="columns" >
+		<entity schema="greentaxi_lgl.INSTANCE" name="dim_location" color="C1D8EE" x="663" y="306" />
+		<entity schema="greentaxi_lgl.INSTANCE" name="dim_paymenttype" color="C1D8EE" x="102" y="170" />
+		<entity schema="greentaxi_lgl.INSTANCE" name="dim_triptype" color="C1D8EE" x="51" y="323" />
+		<entity schema="greentaxi_lgl.INSTANCE" name="dim_vendor" color="C1D8EE" x="578" y="170" />
+		<entity schema="greentaxi_lgl.INSTANCE" name="facts_trip" color="C1D8EE" x="272" y="289" />
+		<callout x="51" y="51" pointer="Round" >
+			<comment><![CDATA[This is a layout - a diagram with tools.
+- Create new entities by right-clicking the layout. 
+- Double-click entity headers to edit.
+- For a better understanding of the schema, create multiple layouts.
+- Deploy the model into the database by converting it first to the physical design.]]></comment>
+		</callout>
+	</layout>
+</project>
