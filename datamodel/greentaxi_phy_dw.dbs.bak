@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="greentaxi_dw_lgl" id="GoogleBigQuery-1a6a" database="GoogleBigQuery" >
+	<schema name="INSTANCE" catalogname="greentaxi_dw_lgl" >
+		<table name="dim_date" >
+			<column name="date_id" type="int64" jt="4" mandatory="y" />
+			<index name="pk_dim_date" unique="PRIMARY_KEY" >
+				<column name="date_id" />
+			</index>
+		</table>
+		<table name="dim_location" >
+			<column name="location_id" type="int64" jt="4" mandatory="y" />
+			<column name="borough" type="string" length="255" jt="12" />
+			<column name="zone" type="string" length="255" jt="12" />
+			<column name="latitude" type="bignumeric" jt="8" />
+			<column name="longitude" type="bignumeric" jt="8" />
+			<column name="service_zone" type="string" length="255" jt="12" />
+			<index name="pk_dim_location" unique="PRIMARY_KEY" >
+				<column name="location_id" />
+			</index>
+		</table>
+		<table name="dim_paymentType" >
+			<column name="paymentType_id" type="int64" jt="4" mandatory="y" />
+			<index name="pk_dim_paymentType" unique="PRIMARY_KEY" >
+				<column name="paymentType_id" />
+			</index>
+		</table>
+		<table name="dim_rateCode" >
+			<column name="ratecode_id" type="int64" jt="4" mandatory="y" />
+			<index name="pk_dim_rateCode" unique="PRIMARY_KEY" >
+				<column name="ratecode_id" />
+			</index>
+		</table>
+		<table name="dim_tripTye" >
+			<column name="triptype_id" type="int64" jt="4" mandatory="y" />
+			<index name="pk_dim_tripTye" unique="PRIMARY_KEY" >
+				<column name="triptype_id" />
+			</index>
+		</table>
+		<table name="dim_vendor" >
+			<column name="vendor_id" type="int64" jt="4" mandatory="y" />
+			<index name="pk_dim_vendor" unique="PRIMARY_KEY" >
+				<column name="vendor_id" />
+			</index>
+		</table>
+		<table name="facts_trips" >
+			<column name="fact_id" type="int64" jt="4" mandatory="y" />
+			<column name="fare_amount" type="numeric" length="5" decimal="2" jt="2" />
+			<column name="extra_amount" type="numeric" length="5" decimal="2" jt="2" mandatory="y" />
+			<column name="passenger_count" type="int64" jt="4" />
+			<column name="pulocation_id" type="int64" jt="4" mandatory="y" />
+			<column name="dolocation_id" type="int64" jt="4" mandatory="y" />
+			<column name="vendor_id" type="int64" jt="4" />
+			<column name="ratecode_id" type="int64" jt="4" />
+			<column name="paymenttype_id" type="int64" jt="4" />
+			<column name="tripType_id" type="int64" jt="4" />
+			<column name="pickup_date" type="int64" jt="4" />
+			<column name="dropoff_date" type="int64" jt="4" />
+			<index name="pk_facts_trips" unique="PRIMARY_KEY" >
+				<column name="fact_id" />
+				<column name="pulocation_id" />
+				<column name="dolocation_id" />
+			</index>
+			<index name="unq_ratecode_id" unique="UNIQUE_INDEX" >
+				<column name="ratecode_id" />
+			</index>
+			<index name="unq_paymenttype_id" unique="UNIQUE_INDEX" >
+				<column name="paymenttype_id" />
+			</index>
+			<index name="unq_vendor_id" unique="UNIQUE_INDEX" >
+				<column name="vendor_id" />
+			</index>
+			<index name="unq_tripType_id" unique="UNIQUE_INDEX" >
+				<column name="tripType_id" />
+			</index>
+			<index name="unq_pickup_date" unique="UNIQUE_INDEX" >
+				<column name="pickup_date" />
+			</index>
+			<index name="unq_dropoff_date" unique="UNIQUE_INDEX" >
+				<column name="dropoff_date" />
+			</index>
+			<fk name="fk_facts_trips_dim_location" virtual="y" to_schema="greentaxi_dw_lgl.INSTANCE" to_table="dim_location" >
+				<fk_column name="pulocation_id" pk="location_id" />
+			</fk>
+			<fk name="fk_facts_trips_dim_location_0" virtual="y" to_schema="greentaxi_dw_lgl.INSTANCE" to_table="dim_location" >
+				<fk_column name="dolocation_id" pk="location_id" />
+			</fk>
+			<fk name="fk_facts_trips_dim_vendor" virtual="y" to_schema="greentaxi_dw_lgl.INSTANCE" to_table="dim_vendor" >
+				<fk_column name="vendor_id" pk="vendor_id" />
+			</fk>
+			<fk name="fk_facts_trips_dim_rateCode" virtual="y" to_schema="greentaxi_dw_lgl.INSTANCE" to_table="dim_rateCode" >
+				<fk_column name="ratecode_id" pk="ratecode_id" />
+			</fk>
+			<fk name="fk_facts_trips_dim_paymentType" virtual="y" to_schema="greentaxi_dw_lgl.INSTANCE" to_table="dim_paymentType" >
+				<fk_column name="paymenttype_id" pk="paymentType_id" />
+			</fk>
+			<fk name="fk_facts_trips_dim_tripTye" virtual="y" to_schema="greentaxi_dw_lgl.INSTANCE" to_table="dim_tripTye" >
+				<fk_column name="tripType_id" pk="triptype_id" />
+			</fk>
+			<fk name="fk_facts_trips_dim_date" virtual="y" to_schema="greentaxi_dw_lgl.INSTANCE" to_table="dim_date" >
+				<fk_column name="pickup_date" pk="date_id" />
+			</fk>
+			<fk name="fk_facts_trips_dim_date_0" virtual="y" to_schema="greentaxi_dw_lgl.INSTANCE" to_table="dim_date" >
+				<fk_column name="dropoff_date" pk="date_id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-835" confirmed="y" show_relation="columns" >
+		<entity schema="greentaxi_dw_lgl.INSTANCE" name="dim_date" color="C1D8EE" x="51" y="221" />
+		<entity schema="greentaxi_dw_lgl.INSTANCE" name="dim_location" color="C1D8EE" x="816" y="255" />
+		<entity schema="greentaxi_dw_lgl.INSTANCE" name="dim_paymentType" color="C1D8EE" x="85" y="442" />
+		<entity schema="greentaxi_dw_lgl.INSTANCE" name="dim_rateCode" color="C1D8EE" x="374" y="578" />
+		<entity schema="greentaxi_dw_lgl.INSTANCE" name="dim_tripTye" color="C1D8EE" x="799" y="493" />
+		<entity schema="greentaxi_dw_lgl.INSTANCE" name="dim_vendor" color="C1D8EE" x="442" y="136" />
+		<entity schema="greentaxi_dw_lgl.INSTANCE" name="facts_trips" color="C1D8EE" x="408" y="238" />
+		<callout x="85" y="51" pointer="Round" >
+			<comment><![CDATA[This is a layout - a diagram with tools.
+- Create new entities by right-clicking the layout. 
+- Double-click entity headers to edit.
+- For a better understanding of the schema, create multiple layouts.
+- Deploy the model into the database by converting it first to the physical design.]]></comment>
+		</callout>
+		<script name="SQL_Editor" id="Editor-2689" language="SQL" >
+			<string><![CDATA[CREATE SCHEMA INSTANCE;
+
+CREATE TABLE greentaxi_dw_lgl.INSTANCE.dim_date ( 
+	date_id int64 NOT NULL  
+ );
+
+ALTER TABLE greentaxi_dw_lgl.INSTANCE.dim_date ADD PRIMARY KEY ( date_id )  NOT ENFORCED;
+
+CREATE TABLE greentaxi_dw_lgl.INSTANCE.dim_location ( 
+	location_id int64 NOT NULL  ,
+	borough string  ,
+	zone string  ,
+	latitude bignumeric  ,
+	longitude bignumeric  ,
+	service_zone string  
+ );
+
+ALTER TABLE greentaxi_dw_lgl.INSTANCE.dim_location ADD PRIMARY KEY ( location_id )  NOT ENFORCED;
+
+CREATE TABLE greentaxi_dw_lgl.INSTANCE.dim_paymentType ( 
+	paymentType_id int64 NOT NULL  
+ );
+
+ALTER TABLE greentaxi_dw_lgl.INSTANCE.dim_paymentType ADD PRIMARY KEY ( paymentType_id )  NOT ENFORCED;
+
+CREATE TABLE greentaxi_dw_lgl.INSTANCE.dim_rateCode ( 
+	ratecode_id int64 NOT NULL  
+ );
+
+ALTER TABLE greentaxi_dw_lgl.INSTANCE.dim_rateCode ADD PRIMARY KEY ( ratecode_id )  NOT ENFORCED;
+
+CREATE TABLE greentaxi_dw_lgl.INSTANCE.dim_tripTye ( 
+	triptype_id int64 NOT NULL  
+ );
+
+ALTER TABLE greentaxi_dw_lgl.INSTANCE.dim_tripTye ADD PRIMARY KEY ( triptype_id )  NOT ENFORCED;
+
+CREATE TABLE greentaxi_dw_lgl.INSTANCE.dim_vendor ( 
+	vendor_id int64 NOT NULL  
+ );
+
+ALTER TABLE greentaxi_dw_lgl.INSTANCE.dim_vendor ADD PRIMARY KEY ( vendor_id )  NOT ENFORCED;
+
+CREATE TABLE greentaxi_dw_lgl.INSTANCE.facts_trips ( 
+	fact_id int64 NOT NULL  ,
+	fare_amount numeric  ,
+	extra_amount numeric NOT NULL  ,
+	passenger_count int64  ,
+	pulocation_id int64 NOT NULL  ,
+	dolocation_id int64 NOT NULL  ,
+	vendor_id int64  ,
+	ratecode_id int64  ,
+	paymenttype_id int64  ,
+	tripType_id int64  ,
+	pickup_date int64  ,
+	dropoff_date int64  
+ );
+
+ALTER TABLE greentaxi_dw_lgl.INSTANCE.facts_trips ADD PRIMARY KEY ( fact_id, pulocation_id, dolocation_id )  NOT ENFORCED;
+]]></string>
+		</script>
+	</layout>
+</project>
